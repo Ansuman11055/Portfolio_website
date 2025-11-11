@@ -22,7 +22,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             Hi, I&apos;m{' '}
-            <span className="bg-gradient-to-r from-neon-blue to-neon-purple bg-clip-text text-transparent">
+            <span className="gradient-text">
               Ansuman Panda
             </span>
           </motion.h1>

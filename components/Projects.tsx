@@ -56,7 +56,7 @@ export default function Projects() {
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-5xl md:text-6xl font-bold mb-16 bg-gradient-to-r from-neon-blue to-neon-purple bg-clip-text text-transparent">
+          <h2 className="text-5xl md:text-6xl font-bold mb-16 gradient-text">
             Featured Projects
           </h2>
           

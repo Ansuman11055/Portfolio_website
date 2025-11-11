@@ -17,7 +17,11 @@
   }
   
   .gradient-text {
-    @apply bg-gradient-to-r from-neon-blue to-neon-purple bg-clip-text text-transparent;
+    background: linear-gradient(90deg, #00d4ff 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
   }
   
   .glow-border {

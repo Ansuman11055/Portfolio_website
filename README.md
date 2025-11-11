@@ -112,7 +112,7 @@ vercel
 
 - **Email**: ansuman11c5@gmail.com
 - **GitHub**: [Ansuman11055](https://github.com/Ansuman11055)
-- **LinkedIn**: [Ansuman Panda](https://www.linkedin.com/feed/)
+- **LinkedIn**: [Ansuman Panda](https://www.linkedin.com/in/ansuman11055)
 
 ## 📄 License
 

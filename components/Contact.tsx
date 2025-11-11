@@ -13,11 +13,41 @@ export default function Contact() {
     email: '',
     message: '',
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Form submission logic here
-    console.log('Form submitted:', formData)
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+
+    try {
+      const response = await fetch('https://formspree.io/f/xpwkzkwb', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _replyto: formData.email,
+        }),
+      })
+
+      if (response.ok) {
+        setSubmitStatus('success')
+        setFormData({ name: '', email: '', message: '' })
+        setTimeout(() => setSubmitStatus('idle'), 5000)
+      } else {
+        setSubmitStatus('error')
+      }
+    } catch (error) {
+      console.error('Form submission error:', error)
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -74,7 +104,7 @@ export default function Contact() {
                 </motion.a>
                 
                 <motion.a
-                  href="https://www.linkedin.com/feed/"
+                  href="https://www.linkedin.com/in/ansuman11055"
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ x: 10 }}
@@ -139,13 +169,50 @@ export default function Contact() {
               
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full bg-gradient-to-r from-neon-blue to-neon-purple px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-neon-blue/50 transition-all"
+                disabled={isSubmitting}
+                whileHover={{ scale: isSubmitting ? 1 : 1.05 }}
+                whileTap={{ scale: isSubmitting ? 1 : 0.95 }}
+                className={`w-full px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${
+                  isSubmitting
+                    ? 'bg-gray-600 cursor-not-allowed'
+                    : submitStatus === 'success'
+                    ? 'bg-green-600 hover:bg-green-700'
+                    : submitStatus === 'error'
+                    ? 'bg-red-600 hover:bg-red-700'
+                    : 'bg-gradient-to-r from-neon-blue to-neon-purple hover:shadow-lg hover:shadow-neon-blue/50'
+                }`}
               >
-                <span>Send Message</span>
+                <span>
+                  {isSubmitting
+                    ? 'Sending...'
+                    : submitStatus === 'success'
+                    ? 'Message Sent!'
+                    : submitStatus === 'error'
+                    ? 'Failed. Try Again'
+                    : 'Send Message'}
+                </span>
                 <Send className="w-5 h-5" />
               </motion.button>
+              
+              {submitStatus === 'success' && (
+                <motion.p
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-green-400 text-center text-sm mt-2"
+                >
+                  Thank you! I&apos;ll get back to you soon.
+                </motion.p>
+              )}
+              
+              {submitStatus === 'error' && (
+                <motion.p
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-400 text-center text-sm mt-2"
+                >
+                  Oops! Something went wrong. Please try again or email me directly.
+                </motion.p>
+              )}
             </motion.form>
           </div>
         </motion.div>

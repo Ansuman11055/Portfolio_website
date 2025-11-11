@@ -21,8 +21,10 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Hi, I'm{' '}
-            <span className="gradient-text">Ansuman Panda</span>
+            Hi, I&apos;m{' '}
+            <span className="bg-gradient-to-r from-neon-blue to-neon-purple bg-clip-text text-transparent">
+              Ansuman Panda
+            </span>
           </motion.h1>
           
           <motion.p

@@ -75,7 +75,13 @@ export default function AboutSection() {
         <div className="relative w-full max-w-xl flex flex-col items-center justify-center mb-10" style={{ height: 420 }}>
           {/* 3D Brain (z-0) */}
           <div className="absolute inset-0 z-0">
-            <Canvas camera={{ position: [0, 0, 15], fov: 45 }} className="w-full h-full">
+            <Canvas
+              camera={{ position: [0, 0, 15], fov: 45 }}
+              className="w-full h-full"
+              dpr={[1, 1.5]}
+              gl={{ antialias: false, powerPreference: 'high-performance' }}
+              performance={{ min: 0.5 }}
+            >
               <ambientLight intensity={0.7} />
               <pointLight position={[10, 10, 10]} intensity={1.5} color="#00fff7" />
               <BrainNetwork />

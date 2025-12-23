@@ -19,7 +19,7 @@ function BrainParticles({ count = 800, scrollProgressRef }: BrainParticlesProps)
   const pointsRef = useRef<THREE.Points>(null);
   const groupRef = useRef<THREE.Group>(null);
   // Load a standard brain model (GLTF) to sample points from
-  const { scene } = useGLTF('/models/brain/scene.gltf');
+  const { scene } = useGLTF('/models/human-brain.glb');
   // State to hold our generated points
   const [brainData, setBrainData] = useState<{
     positions: Float32Array;
@@ -92,9 +92,9 @@ function BrainParticles({ count = 800, scrollProgressRef }: BrainParticlesProps)
       // Target rotation
       targetRotation.current.y = prog * Math.PI * 2;
       targetRotation.current.x = Math.sin(prog * Math.PI) * 0.25;
-      // Lerp current rotation towards target
-      groupRef.current.rotation.y += (targetRotation.current.y - groupRef.current.rotation.y) * 0.08;
-      groupRef.current.rotation.x += (targetRotation.current.x - groupRef.current.rotation.x) * 0.08;
+      // Lerp current rotation towards target (very high factor for ultra-smooth, almost seamless catch-up)
+      groupRef.current.rotation.y += (targetRotation.current.y - groupRef.current.rotation.y) * 0.28;
+      groupRef.current.rotation.x += (targetRotation.current.x - groupRef.current.rotation.x) * 0.28;
     }
   });
 
@@ -157,7 +157,7 @@ export default function BrainBackground() {
       trigger: document.body,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: 0.6, // Lower scrub for smoother, more responsive feel
+      scrub: 0.1, // Minimum scrub for the smoothest, most seamless scroll-driven animation
       onUpdate: (self) => {
         scrollProgress.current = self.progress;
       },

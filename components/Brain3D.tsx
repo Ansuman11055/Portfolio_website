@@ -1,118 +1,76 @@
-'use client'
+// Preload the brain model as soon as possible
 
-import React, { useRef, useMemo, useLayoutEffect } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useGLTF } from '@react-three/drei'
+// (removed duplicate import)
+useGLTF.preload('/models/human-brain.glb');
 
-gsap.registerPlugin(ScrollTrigger)
+'use client';
+import React, { useRef, useEffect, Suspense } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
 
-// Utility: Generate random points on a sphere
-function generatePoints(count = 220, radius = 3.2) {
-  const points = []
-  for (let i = 0; i < count; i++) {
-    const phi = Math.acos(1 - 2 * Math.random())
-    const theta = 2 * Math.PI * Math.random()
-    const x = radius * Math.sin(phi) * Math.cos(theta)
-    const y = radius * Math.sin(phi) * Math.sin(theta)
-    const z = radius * Math.cos(phi)
-    points.push(new THREE.Vector3(x, y, z))
-  }
-  return points
-}
+function WireframeBrain() {
+  const ref = useRef<THREE.Group>(null);
+  const { scene } = useGLTF('/models/human-brain.glb');
 
-function NeuralNetwork({
-  groupRef,
-  scrollProgressRef,
-}: {
-  groupRef: React.RefObject<THREE.Group>
-  scrollProgressRef: React.MutableRefObject<number>
-}) {
-  const points = useMemo(() => generatePoints(220, 3.2), [])
-  const lines = useMemo(() => {
-    const threshold = 1.45
-    const pairs = []
-    for (let i = 0; i < points.length; i++) {
-      for (let j = i + 1; j < points.length; j++) {
-        if (points[i].distanceTo(points[j]) < threshold) {
-          pairs.push([points[i], points[j]])
-        }
-      }
-    }
-    return pairs
-  }, [points])
+  // Smooth scroll-driven rotation
+  const targetRotation = useRef({ x: 0, y: 0 });
+  const lastScroll = useRef(0);
 
-  // Animate rotation in sync with scroll progress
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      // Map scroll position to rotation (tweak multipliers for effect)
+      targetRotation.current.y = scrollY * 0.005;
+      targetRotation.current.x = Math.sin(scrollY * 0.002) * 0.18;
+      lastScroll.current = scrollY;
+    };
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Animate rotation smoothly toward target
   useFrame(() => {
-    if (groupRef.current) {
-      const prog = scrollProgressRef.current
-      groupRef.current.rotation.y = prog * Math.PI * 2
-      groupRef.current.rotation.x = Math.sin(prog * Math.PI) * 0.25
+    if (ref.current) {
+      ref.current.rotation.y += (targetRotation.current.y - ref.current.rotation.y) * 0.08;
+      ref.current.rotation.x += (targetRotation.current.x - ref.current.rotation.x) * 0.08;
     }
-  })
+  });
 
-  // Load the GLTF model
-  const { scene } = useGLTF('/models/brain/scene.gltf')
+  // Find the mesh in the loaded scene
+
+  let mesh: THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]> | null = null;
+  scene.traverse((child: THREE.Object3D) => {
+    if ((child as THREE.Mesh).isMesh && (child as THREE.Mesh).geometry && !mesh) {
+      mesh = child as THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>;
+    }
+  });
+  if (!mesh) return null;
 
   return (
-    <group ref={groupRef}>
-      {/* Points */}
-      {points.map((p, i) => (
-        <mesh key={i} position={p.toArray()}>
-          <sphereGeometry args={[0.11, 12, 12]} />
-          <meshBasicMaterial color={i % 2 === 0 ? '#00fff7' : '#a78bfa'} />
-        </mesh>
-      ))}
-      {/* Lines */}
-      {lines.map(([a, b], i) => (
-        <line key={i}>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              count={2}
-              array={new Float32Array([a.x, a.y, a.z, b.x, b.y, b.z])}
-              itemSize={3}
-            />
-          </bufferGeometry>
-          <lineBasicMaterial
-            color={i % 2 === 0 ? '#a78bfa' : '#00fff7'}
-            transparent
-            opacity={0.28}
-          />
-        </line>
-      ))}
-      {/* GLTF Model */}
-      <primitive object={scene} />
+    <group ref={ref}>
+      {/* Main wireframe layer (cyan) */}
+      <mesh geometry={(mesh as THREE.Mesh).geometry}>
+        <meshBasicMaterial wireframe color="#00FFFF" transparent opacity={0.3} />
+      </mesh>
+      {/* Optional: Second layer for glow/interference (purple, slightly larger) */}
+      <mesh geometry={(mesh as THREE.Mesh).geometry} scale={1.03}>
+        <meshBasicMaterial wireframe color="#bd00ff" transparent opacity={0.18} />
+      </mesh>
     </group>
-  )
+  );
 }
 
 export default function Brain3D() {
-  const groupRef = useRef<THREE.Group>(null)
-  const scrollProgress = useRef(0)
-
-  useLayoutEffect(() => {
-    const trig = ScrollTrigger.create({
-      trigger: document.body,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 1.5,
-      onUpdate: (self) => {
-        scrollProgress.current = self.progress
-      },
-    })
-    return () => trig.kill()
-  }, [])
-
   return (
     <div className="absolute inset-0 z-0 pointer-events-none">
-      <Canvas camera={{ position: [0, 0, 15], fov: 45 }}>
+      <Canvas camera={{ position: [0, 0, 15], fov: 45 }} dpr={[1, 1.5]} gl={{ antialias: false, powerPreference: 'high-performance' }}>
         <ambientLight intensity={0.7} />
         <pointLight position={[10, 10, 10]} intensity={1.5} color="#00fff7" />
-        <NeuralNetwork groupRef={groupRef} scrollProgressRef={scrollProgress} />
+        <Suspense fallback={null}>
+          <WireframeBrain />
+        </Suspense>
       </Canvas>
     </div>
-  )
+  );
 }

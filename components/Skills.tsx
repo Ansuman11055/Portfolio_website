@@ -66,8 +66,8 @@ export default function Skills() {
   const ref = useRef(null)
 
   return (
-    <section id="skills" className="min-h-screen py-20 px-6 flex items-center">
-      <div className="max-w-7xl mx-auto w-full">
+    <section id="skills" className="min-h-screen py-20 px-6 flex items-center justify-center">
+      <div className="w-full max-w-7xl mx-auto rounded-2xl bg-black/20 backdrop-blur-md shadow-2xl p-8">
         {/* Section heading with reveal */}
         <motion.div
           ref={ref}

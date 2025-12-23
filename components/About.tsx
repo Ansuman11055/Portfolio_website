@@ -3,11 +3,11 @@
 import { motion } from 'framer-motion'
 import { useRef } from 'react'
 import Image from 'next/image'
+import Brain3D from './Brain3D'
 import { revealVariants, containerVariants, itemVariants, slideLeft, slideRight } from '@/lib/animations'
 
 export default function About() {
   const ref = useRef(null)
-
   const highlights = [
     { emoji: '🎓', text: 'IIT Mandi, B.Tech \'28' },
     { emoji: '🤖', text: 'Machine Learning Engineer' },
@@ -16,8 +16,10 @@ export default function About() {
   ]
 
   return (
-    <section id="about" className="min-h-screen flex items-center py-20 px-6">
-      <div className="max-w-7xl mx-auto w-full">
+    <section id="about" className="relative min-h-screen flex items-center py-20 px-6 overflow-hidden">
+      {/* 3D Neural Brain Background */}
+      <Brain3D />
+      <div className="relative z-10 max-w-7xl mx-auto w-full">
         {/* Section heading with reveal */}
         <motion.div
           ref={ref}
@@ -32,7 +34,6 @@ export default function About() {
           </h2>
           <div className="h-1 w-16 bg-gradient-to-r from-neon-blue to-neon-purple mt-4 rounded-full" />
         </motion.div>
-        
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Text content - left side */}
           <motion.div
@@ -40,7 +41,7 @@ export default function About() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.15 }}
             variants={slideLeft}
-            className="space-y-6 order-2 md:order-1"
+            className="space-y-6 order-2 md:order-1 backdrop-blur-sm rounded-xl p-2"
           >
             <p className="text-[clamp(1rem,2vw,1.25rem)] text-gray-300 leading-relaxed">
               I'm a B.Tech student at{' '}
@@ -95,7 +96,7 @@ export default function About() {
             <div className="relative">
               {/* Glowing border effect */}
               <motion.div
-                className="absolute inset-0 rounded-full bg-gradient-to-r from-neon-blue to-neon-purple opacity-75 blur-xl group-hover:opacity-100 transition-opacity duration-300"
+                className="absolute inset-0 rounded-full ring-4 ring-cyan-500 shadow-[0_0_20px_rgba(0,255,255,0.5)] opacity-80 blur-md group-hover:opacity-100 transition-opacity duration-300"
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 3, repeat: Infinity }}
               />

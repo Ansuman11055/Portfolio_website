@@ -47,8 +47,8 @@ export default function Projects() {
   const ref = useRef(null)
 
   return (
-    <section id="projects" className="min-h-screen py-20 px-6 bg-carbon-black">
-      <div className="max-w-6xl mx-auto">
+    <section id="projects" className="min-h-screen py-20 px-6 flex items-center justify-center">
+      <div className="w-full max-w-6xl mx-auto rounded-2xl bg-black/20 backdrop-blur-md shadow-2xl p-8">
         {/* Section heading with reveal */}
         <motion.div
           ref={ref}

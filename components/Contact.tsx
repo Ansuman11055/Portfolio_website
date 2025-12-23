@@ -49,8 +49,8 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="min-h-screen py-20 px-6 flex items-center">
-      <div className="max-w-7xl mx-auto w-full">
+    <section id="contact" className="min-h-screen py-20 px-6 flex items-center justify-center">
+      <div className="w-full max-w-7xl mx-auto rounded-2xl bg-black/20 backdrop-blur-md shadow-2xl p-8">
         <motion.div
           ref={ref}
           initial="hidden"

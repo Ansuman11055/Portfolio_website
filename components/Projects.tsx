@@ -1,9 +1,9 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { Github, ExternalLink } from 'lucide-react'
+import { revealVariants, containerVariants, itemVariants, hoverDepth } from '@/lib/animations'
 
 const projects = [
   {
@@ -45,80 +45,96 @@ const projects = [
 
 export default function Projects() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
 
   return (
-    <section id="projects" className="min-h-screen py-20 px-6">
-      <div className="max-w-7xl mx-auto">
+    <section id="projects" className="min-h-screen py-20 px-6 bg-carbon-black">
+      <div className="max-w-6xl mx-auto">
+        {/* Section heading with reveal */}
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.8 }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          variants={revealVariants}
+          className="mb-16"
         >
-          <h2 className="text-5xl md:text-6xl font-bold mb-16 gradient-text">
+          <h2 className="text-[clamp(2rem,6vw,3.5rem)] font-bold gradient-text leading-tight">
             Featured Projects
           </h2>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.name}
-                initial={{ opacity: 0, y: 50 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -10, scale: 1.02 }}
-                className="glass rounded-2xl p-6 hover:glow-border transition-all duration-300 group"
-              >
-                <div className={`h-2 w-20 rounded-full bg-gradient-to-r ${project.gradient} mb-6`} />
-                
-                <h3 className="text-2xl font-bold mb-3 group-hover:gradient-text transition-all">
-                  {project.name}
-                </h3>
-                
-                <p className="text-gray-400 mb-6 leading-relaxed">
-                  {project.description}
-                </p>
-                
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.tech.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 text-sm bg-white/5 rounded-full border border-white/10 text-gray-300"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                
-                <div className="flex gap-4">
-                  <motion.a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 text-neon-blue hover:text-neon-purple transition-colors"
+          <div className="h-1 w-16 bg-gradient-to-r from-neon-blue to-neon-purple mt-4 rounded-full" />
+        </motion.div>
+
+        {/* Project grid with stagger */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.22 }}
+          className="grid md:grid-cols-2 gap-8"
+        >
+          {projects.map((project) => (
+            <motion.div
+              key={project.name}
+              variants={itemVariants}
+              whileHover={hoverDepth.hover}
+              initial={hoverDepth.initial}
+              className="glass rounded-2xl p-6 md:p-8 border border-white/10 hover:border-neon-blue/30 transition-all duration-300 group cursor-pointer"
+            >
+              {/* Gradient accent bar */}
+              <div
+                className={`h-1 w-12 rounded-full bg-gradient-to-r ${project.gradient} mb-6`}
+              />
+
+              {/* Project name */}
+              <h3 className="text-2xl md:text-3xl font-bold mb-3 group-hover:gradient-text transition-all duration-300">
+                {project.name}
+              </h3>
+
+              {/* Project description */}
+              <p className="text-gray-400 text-base leading-relaxed mb-6">
+                {project.description}
+              </p>
+
+              {/* Tech stack */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {project.tech.map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-3 py-1 text-xs md:text-sm bg-white/5 rounded-full border border-white/10 text-gray-300 hover:border-neon-blue/50 transition-colors duration-300"
                   >
-                    <Github className="w-5 h-5" />
-                    <span>Code</span>
-                  </motion.a>
-                  
-                  <motion.a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 text-neon-purple hover:text-neon-blue transition-colors"
-                  >
-                    <ExternalLink className="w-5 h-5" />
-                    <span>View</span>
-                  </motion.a>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex gap-4">
+                <motion.a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2 text-neon-blue hover:text-neon-purple transition-colors duration-300 text-sm md:text-base"
+                >
+                  <Github className="w-4 h-4 md:w-5 md:h-5" />
+                  <span>Code</span>
+                </motion.a>
+
+                <motion.a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2 text-neon-purple hover:text-neon-blue transition-colors duration-300 text-sm md:text-base"
+                >
+                  <ExternalLink className="w-4 h-4 md:w-5 md:h-5" />
+                  <span>View</span>
+                </motion.a>
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
     </section>

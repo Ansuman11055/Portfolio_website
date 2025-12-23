@@ -1,13 +1,12 @@
-'use client'
+"use client"
 
 import { motion } from 'framer-motion'
-import { useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { Mail, Github, Linkedin, Send } from 'lucide-react'
+import { revealVariants, slideLeft, slideRight, itemVariants } from '@/lib/animations'
 
 export default function Contact() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -54,9 +53,11 @@ export default function Contact() {
       <div className="max-w-7xl mx-auto w-full">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.8 }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          variants={revealVariants}
+          className="mb-16 text-center"
         >
           <h2 className="text-5xl md:text-6xl font-bold mb-16 gradient-text text-center">
             Get In Touch
@@ -64,9 +65,10 @@ export default function Contact() {
           
           <div className="grid md:grid-cols-2 gap-12 items-start">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+              variants={slideLeft}
               className="space-y-8"
             >
               <div>
@@ -118,9 +120,10 @@ export default function Contact() {
             </motion.div>
             
             <motion.form
-              initial={{ opacity: 0, x: 50 }}
-              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+              variants={slideRight}
               onSubmit={handleSubmit}
               className="glass p-8 rounded-2xl space-y-6"
             >

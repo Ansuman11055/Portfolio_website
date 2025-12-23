@@ -11,7 +11,11 @@ import { MeshSurfaceSampler } from 'three-stdlib';
 import * as THREE from 'three';
 
 // 1. Particle System Component
-function BrainParticles({ count = 800, scrollProgressRef }) { // Increased count for better shape definition
+type BrainParticlesProps = {
+  count?: number;
+  scrollProgressRef: React.MutableRefObject<number>;
+};
+function BrainParticles({ count = 800, scrollProgressRef }: BrainParticlesProps) { // Increased count for better shape definition
   const pointsRef = useRef<THREE.Points>(null);
   const groupRef = useRef<THREE.Group>(null);
   // Load a standard brain model (GLTF) to sample points from

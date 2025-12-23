@@ -44,8 +44,8 @@ export default function About() {
             className="space-y-6 order-2 md:order-1 backdrop-blur-sm rounded-xl p-2"
           >
             <p className="text-[clamp(1rem,2vw,1.25rem)] text-gray-300 leading-relaxed">
-              I'm a B.Tech student at{' '}
-              <span className="text-neon-blue font-semibold">IIT Mandi ('28)</span>{' '}
+              I&apos;m a B.Tech student at{' '}
+              <span className="text-neon-blue font-semibold">IIT Mandi (&apos;28)</span>{' '}
               passionate about building intelligent systems that combine algorithmic depth 
               with real-world impact.
             </p>
@@ -56,7 +56,7 @@ export default function About() {
               <span className="text-neon-blue font-semibold">full-stack development</span>, 
               and{' '}
               <span className="text-neon-purple font-semibold">edge computing</span>{' '}
-              — crafting solutions that feel both technical and human.
+              &#8212; crafting solutions that feel both technical and human.
             </p>
             
             <p className="text-[clamp(1rem,2vw,1.25rem)] text-gray-300 leading-relaxed">

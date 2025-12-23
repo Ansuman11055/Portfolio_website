@@ -72,9 +72,9 @@ export default function Contact() {
               className="space-y-8"
             >
               <div>
-                <h3 className="text-3xl font-bold mb-6">Let's Connect</h3>
+                <h3 className="text-3xl font-bold mb-6">Let&apos;s Connect</h3>
                 <p className="text-xl text-gray-400 leading-relaxed">
-                  I'm always open to discussing new projects, creative ideas, 
+                  I&apos;m always open to discussing new projects, creative ideas, 
                   or opportunities to be part of your vision.
                 </p>
               </div>

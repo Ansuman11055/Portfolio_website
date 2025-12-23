@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
+import Image from 'next/image';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -82,10 +83,13 @@ export default function AboutSection() {
           </div>
           {/* Profile Image (z-10) */}
           <div className="relative z-10 flex flex-col items-center justify-center w-full h-full">
-            <img
+            <Image
               src="/profile.jpg"
               alt="Profile"
+              width={320}
+              height={320}
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 md:w-80 md:h-80 rounded-full border-4 border-[#00fff7] shadow-[0_0_60px_20px_rgba(0,255,255,0.4)] object-cover bg-[#10131a]"
+              priority
             />
             {/* Optional: Glowing ring */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border-2 border-[#00fff7]/30" />

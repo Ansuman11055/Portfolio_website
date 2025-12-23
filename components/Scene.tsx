@@ -56,9 +56,9 @@ export default function Scene() {
         scrub: 1,
         onUpdate: (self) => {
           if (meshRef.current) {
-            meshRef.current.rotation.x = self.getProgress() * Math.PI * 2
-            meshRef.current.rotation.y = self.getProgress() * Math.PI * 3
-            meshRef.current.rotation.z = self.getProgress() * Math.PI
+            meshRef.current.rotation.x = self.progress * Math.PI * 2
+            meshRef.current.rotation.y = self.progress * Math.PI * 3
+            meshRef.current.rotation.z = self.progress * Math.PI
           }
         },
       },
